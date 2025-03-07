@@ -2,7 +2,7 @@ console.log("Electron - Processo principal")
 
 //importação dos recursos do framework
 
-const {app, BrowserWindow, nativeTheme, Menu, Shell} = require('electron/main')
+const {app, BrowserWindow, nativeTheme, Menu, shell} = require('electron/main')
 
 //criação da janela principal
 let win //win é a variavel que receberá a classe modelo que cria a janela 
@@ -57,3 +57,73 @@ function aboutWindow() {
     })
   })
 
+
+//compatibilização com MAC
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin'){
+    app.quit()
+  }
+})
+
+//Reduzir a verbosidade de logs não criticos (devtools)
+app.commandLine.appendSwitch('log-level', '3')
+
+//tamplate do menu
+const template = [
+  {
+    label: 'Cadastro',
+    submenu: [
+      {
+        label: 'Sair',
+        accelerator: 'Alt+F4',
+        click: () => app.quit()
+      },
+    ]
+  },
+  {
+  label: 'Relatório',
+  submenu: [
+    {
+      label: 'Clientes'
+    }
+  ]
+  },
+  {
+    label: 'Ferramentas',
+    submenu: [
+      {
+        label: 'Aplicar Zoom',
+        role: 'zoomIn'
+      },
+      {
+        label: 'Reduzir',
+        role: 'zoomOut'
+      },
+      {
+        label: 'Restaurar o zoom Padrão',
+        role: 'resetZoom'
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label:'DevTools',
+        role:'toggleDevTools'
+      }
+    ]
+  },
+  {
+    label: 'Ajuda',
+    submenu: [
+      {
+        label: 'Repositório',
+        click: () => shell.openExternal('https://github.com/denisdangelo/cadastroV1.git')
+    },
+    {
+      label: 'Sobre',
+      click:() => aboutWindow()
+    }
+    ]
+  
+  }
+]
