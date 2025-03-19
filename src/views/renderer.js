@@ -24,7 +24,9 @@ document.getElementById('dataAtual').innerHTML = obterData()
 
 function buscarEndereco() {
     // Obtém o valor do CEP, removendo qualquer caractere não numérico
-    var cep = document.getElementById('cep').value
+    var campoCEP = document.getElementById('cep')
+    var mensagemErro = document.getElementById('cepErro');
+    var cep = campoCEP.value.replace(/\D/g, '');
 
     // Verifica se o CEP tem 8 dígitos
     if (cep.length === 8) {
@@ -35,20 +37,28 @@ function buscarEndereco() {
             .then(response => response.json())
             .then(data => {
                 if (data.erro) {
-                    mensagemErro.style.display = 'inline';
+                    // CEP não encontrado na API
+                    mensagemErro.style.display = 'inline'; // Exibe a mensagem de erro
+                    campoCEP.value = ""; // Limpa o campo
+                    campoCEP.focus(); // Retorna o foco para o campo do CEP
                 } else {
                     // Preenche os campos com os dados retornados
                     document.getElementById('logradouro').value = data.logradouro;
                     document.getElementById('bairro').value = data.bairro;
                     document.getElementById('cidade').value = data.localidade;
                     document.getElementById('uf').value = data.uf;
+                    mensagemErro.style.display = 'none'; // Oculta a mensagem de erro
                 }
             })
             .catch(error => {
                 mensagemErro.style.display = 'inline';
+                campoCEP.value = ""; // Limpa o campo
+                campoCEP.focus(); // Retorna o foco para o campo do CEP
             });
     } else {
        mensagemErro.style.display = 'inline';
+       campoCEP.value = ""; // Limpa o campo
+       campoCEP.focus(); // Retorna o foco para o campo do CEP
     }
 }
 
@@ -61,6 +71,7 @@ function validarCPF() {
         console.log("CPF inválido!");
         mensagemErro.style.display = 'inline'; // Exibe a mensagem de erro
         campo.value = ""; // Limpa o campo
+        campo.focus(); // Volta o foco para o campo do CPF
         
         return false; // Retorna false para indicar que o CPF é inválido
     } else {

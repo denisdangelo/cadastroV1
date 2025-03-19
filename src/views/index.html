@@ -45,7 +45,7 @@
                     </div>
                     <div class="col-md-4">
                         <label for="ccpf" class="form-label">CPF:</label>
-                        <input type="text" name="cpf" id="ccpf" class="form-control" placeholder="XXX.XXX.XXX-XX" onblur="validarCPF()" required>
+                        <input type="text" name="cpf" id="ccpf" class="form-control" placeholder="XXX.XXX.XXX-XX" onchange="validarCPF()" required>
                         <span id="cpfErro" class="text-danger" style="display: none;">CPF inválido! Por favor, corrija.</span>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
                 <div class="row mb-3">
                     <div class="col-md-4">
                        <label for="cep" class="form-label">CEP:</label>
-                     <input type="text" id="cep" class="form-control" maxlength="9" onblur="buscarEndereco()" required>
+                     <input type="text" id="cep" class="form-control" maxlength="9" onchange="buscarEndereco()" required>
                      <span id="cepErro" class="text-danger" style="display: none;">CEP inválido! Por favor, corrija.</span>
                     </div>
                     <div class="col-md-8">
