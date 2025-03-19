@@ -133,3 +133,14 @@ function TestaCPF(strCPF) {
 
     return true;
 }
+
+// Troca do icone do banco de dados (status da conexão)
+//uso da api definida no arquivo preload.js
+//event no arquivo main e message no preload.js
+api.dbStatus((event, message)=>{
+    if (message === "conectado") {
+        document.getElementById('iconeDB').src = "../public/img/dbon.png"
+    } else {
+        document.getElementById('iconeDB').src = "../public/img/dboff.png"
+    }
+})
