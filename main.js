@@ -1,8 +1,8 @@
 console.log("Electron - Processo principal")
 
 //importação dos recursos do framework
-
-const {app, BrowserWindow, nativeTheme, Menu, shell, ipcMain} = require('electron/main')
+//dialog modulo electron para ativar caixa de mensagens
+const {app, BrowserWindow, nativeTheme, Menu, shell, ipcMain, dialog} = require('electron/main')
 
 // Ativação do preload.js (importtação do path)
 const path = require('node:path')
@@ -161,3 +161,22 @@ const template = [
   
   }
 ]
+
+//diaolog é uma caixa de mensagem que vem para confirmar depois de salvar os dados do cliente
+
+ //confirmação de cliente adicionado ao banco
+  //Uso de dialog
+  ////* dialog.showMessageBox({
+    //montagem da caixa de mensagem
+  //  type: 'info',
+  //  title: "aviso",
+  //  message: "Cliente adicionado com sucesso",
+  //  buttons: ['OK']
+  //}).then((result) => {
+  //  //se o botção ok for pressionado
+  //  if(result.response === 0) {
+  //    //enviar um pedido para o renderizador limapr os campos atraves do //preload.js
+     // event.reply('reset-form')
+   // }
+  //}) 
+ 

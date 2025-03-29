@@ -6,6 +6,9 @@
 
 console.log("Processo de reinderização")
 
+//para colocar o foco no campo desse id
+const foco = document.getElementById("cnome")
+
 // inserção da data no rodapé
 function obterData() {
     const data = new Date()
@@ -61,6 +64,8 @@ function buscarEndereco() {
        campoCEP.focus(); // Retorna o foco para o campo do CEP
     }
 }
+
+
 
 function validarCPF() {
     var campo = document.getElementById('ccpf');
@@ -144,3 +149,36 @@ api.dbStatus((event, message)=>{
         document.getElementById('iconeDB').src = "../public/img/dboff.png"
     }
 })
+
+//
+document.eddEventListenner('submit', (event) => {
+    event.preventDefault()
+
+    //acionar a api.cliente
+})
+
+
+// ========================================
+// CRUD DELET =============================
+
+
+
+// ========================================
+// FIM CRUD DELET =========================
+
+// ========================================
+// Reset form =============================
+
+function resetForm() {
+    //recarregar a pagina
+    location.reload()
+}
+
+//uso da api resetForm quando for para salvar, editar ou excluir um cliente
+
+api.resetForm((args) => {
+    resetForm()
+})
+
+// ========================================
+// FIM Reset form =============================
