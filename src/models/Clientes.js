@@ -45,4 +45,4 @@ const clienteSchema = new Schema({
 }, {versionKey: false})
 
 //exportar o modelo de dados para o main
-module.exports = model('Notas', clienteSchema)
+module.exports = model('Clientes', clienteSchema)
