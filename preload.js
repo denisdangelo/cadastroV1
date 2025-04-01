@@ -13,5 +13,6 @@ ipcRenderer.send('db-connect')
 
 contextBridge.exposeInMainWorld('api', {
     dbStatus: (message) => ipcRenderer.on('db-status', message),
+    createCliente: (cadCliente) => ipcRenderer.send('create-cliente', cadCliente),
     resetForm: (args) => ipcRenderer.on('reset-form', args)
 })

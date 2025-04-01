@@ -9,6 +9,26 @@ console.log("Processo de reinderização")
 //para colocar o foco no campo desse id
 const foco = document.getElementById("cnome")
 
+//alterar as propriedades do documento html ao iniciar a aplicação
+document.addEventListener('DOMContentLoaded', () => {
+    foco.focus() //iniciar o documento com foco na caixa de texto
+})
+//criando as variaveis para capturar as informaçãoes do html
+
+let cnome = document.getElementById("cnome")
+let cnasc = document.getElementById("cnasc")
+let cemail = document.getElementById("cemail")
+let ccpf = document.getElementById("ccpf")
+let ccep = document.getElementById("ccep")
+let clogradouro = document.getElementById("clogradouro")
+let cnumero = document.getElementById("cnumero")
+let ccomplemento = document.getElementById("ccomplemento")
+let cbairro = document.getElementById("cbairro")
+let ccidade = document.getElementById("ccidade")
+let cuf = document.getElementById("cuf")
+
+
+
 // inserção da data no rodapé
 function obterData() {
     const data = new Date()
@@ -27,7 +47,7 @@ document.getElementById('dataAtual').innerHTML = obterData()
 
 function buscarEndereco() {
     // Obtém o valor do CEP, removendo qualquer caractere não numérico
-    var campoCEP = document.getElementById('cep')
+    var campoCEP = document.getElementById('ccep')
     var mensagemErro = document.getElementById('cepErro');
     var cep = campoCEP.value.replace(/\D/g, '');
 
@@ -46,10 +66,10 @@ function buscarEndereco() {
                     campoCEP.focus(); // Retorna o foco para o campo do CEP
                 } else {
                     // Preenche os campos com os dados retornados
-                    document.getElementById('logradouro').value = data.logradouro;
-                    document.getElementById('bairro').value = data.bairro;
-                    document.getElementById('cidade').value = data.localidade;
-                    document.getElementById('uf').value = data.uf;
+                    document.getElementById('clogradouro').value = data.logradouro;
+                    document.getElementById('cbairro').value = data.bairro;
+                    document.getElementById('ccidade').value = data.localidade;
+                    document.getElementById('cuf').value = data.uf;
                     mensagemErro.style.display = 'none'; // Oculta a mensagem de erro
                 }
             })
@@ -151,20 +171,43 @@ api.dbStatus((event, message)=>{
 })
 
 //
-document.eddEventListenner('submit', (event) => {
-    event.preventDefault()
+//document.eddEventListener('submit', (event) => {
+   // event.preventDefault()
 
     //acionar a api.cliente
+//})
+
+
+// ========================================
+// CRUD create =============================
+frmCliente.addEventListener('submit', async (event) =>{
+    // evitar o comportamento padrão (recarregar a página)
+    event.preventDefault()
+    // IMPORTANTE! (teste de recebimento dos dados do form - Passo 1)
+    console.log(cnome.value, cnasc.value, cemail.value, ccpf.value, ccpf.value, clogradouro.value, cnumero.value, ccomplemento.value, cbairro.value, ccidade.value,cuf.value)
+     //criar um objeto para enviar ao main os dados da nota
+     const cadCliente = {
+        cadNome: cnome.value,
+        cadNasc: cnasc.value,
+        cadEmail: cemail.value,
+        cadCpf: ccpf.value,
+        cadCep: ccep.value,
+        cadLogradouro: clogradouro.value,
+        cadNumero: cnumero.value,
+        cadComplemento: ccomplemento.value,
+        cadBairro: cbairro.value,
+        cadCidade: ccidade.value,
+        cadUf: cuf.value
+    }
+    //teste de comunicação envio
+    console.log('Enviando para main process:', cadCliente)
+    // Enviar o objeto para o main (Passo 2: fluxo)
+    api.createCliente(cadCliente)
 })
 
 
 // ========================================
-// CRUD DELET =============================
-
-
-
-// ========================================
-// FIM CRUD DELET =========================
+// FIM CRUD Create =========================
 
 // ========================================
 // Reset form =============================

@@ -10,6 +10,9 @@ const path = require('node:path')
 //importação dos metodos conectar e desconectar
 const {conectar, desconectar} = require('./database.js')
 
+// Importação do modelo de dados (Notes.js)
+const clientesModel = require('./src/models/Clientes.js')
+
 //criação da janela principal
 let win //win é a variavel que receberá a classe modelo que cria a janela 
 const createWindow = () => {
@@ -55,6 +58,8 @@ function aboutWindow() {
     }
     
     about.loadFile('./src/views/sobre.html')
+
+    //criar o abaut exit do ipc.main
   }
 
   //inicialização da aplicação (variavel app)
@@ -64,14 +69,16 @@ function aboutWindow() {
     //estabelecendo conexão com o banco de dados
     ipcMain.on('db-connect', async (event) => {
       //a linha abaixo estabelece uma conexão com o banco de dados
-      await conectar()
+      const conectado = await conectar()
+      if (conectado) {
       // enviar ao renderizador uma mensagem para trocar a imagem do icone de status do banco de dados (criar um delay de 0.5 ou 1s para sincronização com a nuvem)
       setTimeout(() => {
         //enviar ao renderizador a mensagem "conectado"
         //db-status (IPC - comunicação entre processos - preload.js)
         //.replay encaminha mensagem 
         event.reply('db-status', "conectado")
-      }, 500)
+       }, 500)
+      }
     })
     //validação se tem outra janela aberta ou não
     //evita abrir mais de uma janela
@@ -161,6 +168,13 @@ const template = [
   
   }
 ]
+
+// =================================================================
+// == CRUD Create ==================================================
+
+
+// =================================================================
+// == FIM CRUD Create ==============================================
 
 //diaolog é uma caixa de mensagem que vem para confirmar depois de salvar os dados do cliente
 

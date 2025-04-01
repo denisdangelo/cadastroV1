@@ -23,7 +23,7 @@
     <div id="interface" class="container">
         
 
-        <form action="mailto:teste@email.com" method="post" enctype="text/plain">
+        <form method="post" enctype="text/plain" id="frmCliente">
             <fieldset class="mb-4">
                 
                 <!-- Nome -->
@@ -54,12 +54,12 @@
                 <div class="row mb-3">
                     <div class="col-md-4">
                        <label for="cep" class="form-label">CEP:</label>
-                     <input type="text" id="cep" class="form-control" maxlength="9" onchange="buscarEndereco()" required>
+                     <input type="text" id="ccep" class="form-control" maxlength="9" onchange="buscarEndereco()" required>
                      <span id="cepErro" class="text-danger" style="display: none;">CEP inválido! Por favor, corrija.</span>
                     </div>
                     <div class="col-md-8">
                         <label for="logradouro" class="form-label">Logradouro:</label>
-                        <input type="text" id="logradouro" class="form-control" readonly>
+                        <input type="text" id="clogradouro" class="form-control" readonly>
                     </div>
                 </div>
 
@@ -67,15 +67,15 @@
                 <div class="row mb-3">
                     <div class="col-md-2">
                         <label for="numero" class="form-label">Número:</label>
-                        <input type="text" id="numero" class="form-control" readonly>
+                        <input type="text" id="cnumero" class="form-control">
                     </div>
                     <div class="col-md-2">
                         <label for="complemento" class="form-label">Complemento:</label>
-                        <input type="text" id="complemento" class="form-control" readonly>
+                        <input type="text" id="ccomplemento" class="form-control">
                     </div>
                     <div class="col-md-8">
                         <label for="bairro" class="form-label">Bairro:</label>
-                        <input type="text" id="bairro" class="form-control" readonly>
+                        <input type="text" id="cbairro" class="form-control" readonly>
                     </div>
                     
                 </div>
@@ -83,11 +83,11 @@
                 <div class="row mb-3">
                     <div class="col-md-8">
                         <label for="cidade" class="form-label">Cidade:</label>
-                        <input type="text" id="cidade" class="form-control" readonly>
+                        <input type="text" id="ccidade" class="form-control" readonly>
                     </div>
                     <div class="col-md-4">
                         <label for="uf" class="form-label">UF:</label>
-                        <select id="uf" name="uf" class="form-select">
+                        <select id="cuf" name="uf" class="form-select">
                             <option value="">Selecione</option>
                             <option value="AC">AC</option>
                             <option value="AL">AL</option>
