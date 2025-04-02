@@ -70,7 +70,7 @@ app.whenReady().then(() => {
   //estabelecendo conexão com o banco de dados
   ipcMain.on('db-connect', async (event) => {
     //a linha abaixo estabelece uma conexão com o banco de dados
-    const conectado = await conectar()
+    let conectado = await conectar()
     if (conectado) {
       // enviar ao renderizador uma mensagem para trocar a imagem do icone de status do banco de dados (criar um delay de 0.5 ou 1s para sincronização com a nuvem)
       setTimeout(() => {
@@ -177,20 +177,22 @@ ipcMain.on('create-cliente', async (event, cadCliente) => {
   console.log(cadCliente)
   // Cadastrar a estrutura de dados no banco de dados MongoDB
   try {
-    const createCliente = new clientesModel({
-      nome: cadCliente.cnome,
-      nasc: cadCliente.cnasc,
-      email: cadCliente.cemail,
-      cpf: cadCliente.ccpf,
-      cep: cadCliente.ccep,
-      rua: cadCliente.clogradouro,
-      Num: cadCliente.cnumero,
-      complemento: cadCliente.ccomplemento,
-      bairro: cadCliente.cbairro,
-      cidade: cadCliente.ccidade,
-      uf: cadCliente.cuf
+    const newCliente = new clientesModel({
+      nome: cadCliente.cadNome,
+      nasc: cadCliente.cadNasc,
+      email: cadCliente.cadEmail,
+      cpf: cadCliente.cadCpf,
+      cep: cadCliente.cadCep,
+      rua: cadCliente.cadLogradouro,
+      Num: cadCliente.cadNumero,
+      complemento: cadCliente.cadComplemento,
+      bairro: cadCliente.cadBairro,
+      cidade: cadCliente.cadCidade,
+      uf: cadCliente.cadUf
+    
     })
-    await createCliente.save()
+    await newCliente.save()
+   
     //confirmação de cliente adicionado no banco
     dialog.showMessageBox({
       type: 'info',
@@ -198,17 +200,17 @@ ipcMain.on('create-cliente', async (event, cadCliente) => {
       message: "Cliente adicionado com sucesso",
       buttons: ['OK']
     }).then((result) => {
-      if (result.response === 0) {
+     if (result.response === 0) {
         event.reply('reset-form')
-      }
+     }
     })
   } catch (error) {
     //tratamento da escessão cpf duplicado
-    if (error.code === 11000) {
+   if (error.code === 11000) {
       dialog.showMessageBox({
         type: 'error',
         title: "Atenção!",
-        message: "CPF Já cadastrado.\nVerifique o número digitado",
+       message: "CPF Já cadastrado.//\nVerifique o número digitado",
         buttons: ['OK']
       }).them((result) => {
         //se o botão OK for pressionado

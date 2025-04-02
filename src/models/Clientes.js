@@ -4,7 +4,7 @@
  */
 
 // importação dos recursos do moongose
-const {model, Schema} = require('mongoose')
+const {model, Schema, version} = require('mongoose')
 
 //criação da estrutura da criação
 const clienteSchema = new Schema({
