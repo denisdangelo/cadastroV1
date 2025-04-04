@@ -9,6 +9,14 @@ console.log("Processo de reinderização")
 //para colocar o foco no campo desse id
 const foco = document.getElementById("cnome")
 
+
+api.dbStatus((event, message)=>{
+    if (message === "conectado") {
+        document.getElementById('iconeDB').src = "../public/img/dbon.png"
+    } else {
+        document.getElementById('iconeDB').src = "../public/img/dboff.png"
+    }
+})
 //alterar as propriedades do documento html ao iniciar a aplicação
 document.addEventListener('DOMContentLoaded', () => {
     foco.focus() //iniciar o documento com foco na caixa de texto
@@ -133,42 +141,10 @@ function TestaCPF(strCPF) {
 }
 
 
-function TestaCPF(strCPF) {
-    var Soma = 0;
-    var Resto;
-
-    if (strCPF.length !== 11 || /^(\d)\1{10}$/.test(strCPF)) return false; // Verifica se são 11 dígitos e se não são repetidos
-
-    for (var i = 1; i <= 9; i++) {
-        Soma += parseInt(strCPF.charAt(i - 1)) * (11 - i);
-    }
-    Resto = (Soma * 10) % 11;
-
-    if (Resto === 10 || Resto === 11) Resto = 0;
-    if (Resto !== parseInt(strCPF.charAt(9))) return false;
-
-    Soma = 0;
-    for (var i = 1; i <= 10; i++) {
-        Soma += parseInt(strCPF.charAt(i - 1)) * (12 - i);
-    }
-    Resto = (Soma * 10) % 11;
-
-    if (Resto === 10 || Resto === 11) Resto = 0;
-    if (Resto !== parseInt(strCPF.charAt(10))) return false;
-
-    return true;
-}
-
 // Troca do icone do banco de dados (status da conexão)
 //uso da api definida no arquivo preload.js
 //event no arquivo main e message no preload.js
-api.dbStatus((event, message)=>{
-    if (message === "conectado") {
-        document.getElementById('iconeDB').src = "../public/img/dbon.png"
-    } else {
-        document.getElementById('iconeDB').src = "../public/img/dboff.png"
-    }
-})
+
 
 //
 //document.eddEventListener('submit', (event) => {

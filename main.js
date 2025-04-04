@@ -2,7 +2,7 @@ console.log("Electron - Processo principal")
 
 //importação dos recursos do framework
 //dialog modulo electron para ativar caixa de mensagens
-const { app, BrowserWindow, nativeTheme, Menu, shell, ipcMain, dialog } = require('electron/main')
+const { app, BrowserWindow, nativeTheme, Menu, shell, ipcMain, dialog,  } = require('electron/main')
 
 // Ativação do preload.js (importtação do path)
 const path = require('node:path')
@@ -10,9 +10,17 @@ const path = require('node:path')
 //importação dos metodos conectar e desconectar
 const { conectar, desconectar } = require('./database.js')
 
+
+
 // Importação do modelo de dados (Notes.js)
 const clientesModel = require('./src/models/Clientes.js')
 const { title } = require('node:process')
+
+//importação da biblioteca nativa do JS para manipular arquivos
+const fs = require('fs')
+
+//importação do pacote jspdf (arquivo pdf) npm
+const { jspdf, default: jsPDF} = require('jspdf')
 
 //criação da janela principal
 let win //win é a variavel que receberá a classe modelo que cria a janela 
@@ -72,6 +80,7 @@ app.whenReady().then(() => {
     //a linha abaixo estabelece uma conexão com o banco de dados
     let conectado = await conectar()
     if (conectado) {
+      console.log("Banco conectado! Enviando status ao renderer.")
       // enviar ao renderizador uma mensagem para trocar a imagem do icone de status do banco de dados (criar um delay de 0.5 ou 1s para sincronização com a nuvem)
       setTimeout(() => {
         //enviar ao renderizador a mensagem "conectado"
@@ -79,6 +88,8 @@ app.whenReady().then(() => {
         //.replay encaminha mensagem 
         event.reply('db-status', "conectado")
       }, 500)
+    } else {
+      console.log("Falha na conexão com o banco.")
     }
   })
   //validação se tem outra janela aberta ou não
@@ -122,7 +133,8 @@ const template = [
     label: 'Relatório',
     submenu: [
       {
-        label: 'Clientes'
+        label: 'Clientes',
+        click: () => relatorioClientes()
       }
     ]
   },
@@ -227,6 +239,80 @@ ipcMain.on('create-cliente', async (event, cadCliente) => {
 
 // =================================================================
 // == FIM CRUD Create ==============================================
+
+//=============================================================
+//== Relatório de clientes ====================================
+async function relatorioClientes(){
+  try {
+    //=======================================
+    //        configuração do documento pdf
+    //======================================
+    //p (portrait [em pé]) l (landscape [deitado])
+      const doc = new jsPDF('p', 'mm', 'a4')
+
+      //inserir data atual
+      const dataAtual = new Date().toLocaleDateString ('pt-BR')
+      //doc.setFontSize() tamanho da fonte 
+      doc.setFontSize(10)
+      //doc.text() escreve um texto no documento criado acima
+      doc.text(`Data: ${dataAtual}`, 170,15) //(150x,15y(mm))
+
+      //titulo
+      doc.setFontSize(18)
+      doc.text("Relatório de Clientes", 15, 30)
+
+      //conteudo
+      doc.setFontSize(12)
+      let y = 40 //variavel de apoio
+      doc.text("Nome", 14, y)
+     
+      doc.text("E-Mail", 130, y)
+      //incremento de +5 na variavel y para pular linha
+      y += 5
+      //desenhar uma linha
+      doc.setLineWidth(0.5)
+      doc.line(10, y, 200, y)
+      y+=10
+      //====================================fim
+     
+      //========================================
+      // obter a listagem de clientes em ordem alfabética
+      //========================================
+      const clientes = await clientesModel.find().sort({nome: 1})
+      //teste de recebimento (importante) pode deixar comentado depois de testar
+      console.log(clientes)
+      //popular o documento pdf com os clientes cadastrados
+      //forEach(c) usa o laço for de "busca" e chama um argumento "c"
+      clientes.forEach((c)=> {
+        doc.text(c.nome, 15, y)
+        doc.text(c.email, 130, y)
+        y += 10
+      });
+
+
+    //====================================fim
+    
+    //==abrir o arquivo=======================
+    //========================================
+
+    //==abrir o arquivo pdf no sistema operacional
+        //=======================================
+      // Definir o caminho do arquivo temporário e nome do arquivo com extenção .pdf
+      const tempDir = app.getPath('temp')
+      const filePath = path.join(tempDir, 'clientes.pdf')
+      // salvar temporariamente o arquivo
+      doc.save(filePath)
+      // abrir o arquivo no aplicativo padrão de leitura de pdf do computador do usuário
+      shell.openPath(filePath)
+  } catch (error) {
+      console.log(error)
+  }
+}
+
+//=============================================================
+//== Relatório de clientes - Fim ==============================
+
+
 
 //diaolog é uma caixa de mensagem que vem para confirmar depois de salvar os dados do cliente
 
